@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# DVC local cache
+.dvc/cache/
+
+# Raw and processed data
+data/raw/*
+data/processed/*
+
+# Keep directory placeholders
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Keep DVC pointer files
+!data/raw/*.dvc
+!data/processed/*.dvc
+
+# Model artifacts
+models/*
+
+# Keep placeholder
+!models/.gitkeep
+
+# Python tooling
+.pytest_cache/
+.ruff_cache/
+
+# Temporary files
+*.tmp
+*.log
