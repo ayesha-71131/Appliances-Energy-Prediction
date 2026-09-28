@@ -1,0 +1,15 @@
+[project]
+name = "appliances-energy-prediction"
+version = "0.1.0"
+description = "MLOps project for predicting appliance energy use."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra"
