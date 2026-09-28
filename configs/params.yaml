@@ -1,0 +1,13 @@
+# Merge this `prepare:` section into your existing configs/params.yaml
+# (Member 2 adds train/evaluate sections; keep them separate to avoid conflicts).
+prepare:
+  raw_path: data/raw/energydata_complete.csv
+  output_dir: data/processed
+  target: Appliances        # column to predict
+  horizon: 1                # predict T+1 (10 minutes ahead)
+  drop_columns: []          # experiment: [rv1, rv2]
+  temporal_features: true   # hour, weekday, month
+  lags: [1, 6, 144]         # 10 min, 1 h, 24 h
+  rolling_windows: []       # experiment: e.g. [6, 36]
+  train_frac: 0.70
+  val_frac: 0.15            # test = remaining 0.15
