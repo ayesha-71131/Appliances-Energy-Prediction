@@ -1,0 +1,19 @@
+# Add only after data/initial-dataset is merged (branch feat/dvc-pipeline).
+# Member 2 will append the train and evaluate stages.
+stages:
+  validate:
+    cmd: python src/data_checks.py data/raw/energydata_complete.csv
+    deps:
+      - src/data_checks.py
+      - data/raw/energydata_complete.csv
+
+  prepare:
+    cmd: python src/prepare.py --params configs/params.yaml
+    deps:
+      - src/prepare.py
+      - data/raw/energydata_complete.csv
+    params:
+      - configs/params.yaml:
+          - prepare
+    outs:
+      - data/processed

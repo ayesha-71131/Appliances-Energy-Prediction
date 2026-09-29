@@ -1,0 +1,46 @@
+schema: '2.0'
+stages:
+  validate:
+    cmd: python src/data_checks.py data/raw/energydata_complete.csv
+    deps:
+    - path: data/raw/energydata_complete.csv
+      hash: md5
+      md5: 69ef922b5fcafcd49097cfc09e07167e
+      size: 11979363
+    - path: src/data_checks.py
+      hash: md5
+      md5: e3827b5b39dc9b4f43847ec61badf308
+      size: 4500
+  prepare:
+    cmd: python src/prepare.py --params configs/params.yaml
+    deps:
+    - path: data/raw/energydata_complete.csv
+      hash: md5
+      md5: 69ef922b5fcafcd49097cfc09e07167e
+      size: 11979363
+    - path: src/prepare.py
+      hash: md5
+      md5: be59face6f25e24c80d7e14bcda028a5
+      size: 4415
+    params:
+      configs/params.yaml:
+        prepare:
+          raw_path: data/raw/energydata_complete.csv
+          output_dir: data/processed
+          target: Appliances
+          horizon: 1
+          drop_columns: []
+          temporal_features: true
+          lags:
+          - 1
+          - 6
+          - 144
+          rolling_windows: []
+          train_frac: 0.7
+          val_frac: 0.15
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 9cf957407cf67b71485044a5691fcc52.dir
+      size: 6233963
+      nfiles: 3
