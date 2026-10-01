@@ -12,6 +12,9 @@ dependencies = [
 [dependency-groups]
 dev = [
     "dvc>=3.67.1",
+    "ipykernel>=7.3.0",
+    "jupytext>=1.19.5",
+    "matplotlib>=3.10.9",
     "pre-commit>=4.6.2",
     "pytest>=8.0",
 ]
@@ -21,3 +24,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 pythonpath = ["."]
 addopts = "-ra"
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*.py" = ["E402"]
+"notebooks/*.ipynb" = ["E402"]
