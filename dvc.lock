@@ -9,8 +9,8 @@ stages:
       size: 11979363
     - path: src/data_checks.py
       hash: md5
-      md5: 2a0368fdb4fb101cb1d10b5d7e1a33e1
-      size: 4639
+      md5: e3827b5b39dc9b4f43847ec61badf308
+      size: 4500
   prepare:
     cmd: python src/prepare.py --params configs/params.yaml
     deps:
@@ -20,8 +20,8 @@ stages:
       size: 11979363
     - path: src/prepare.py
       hash: md5
-      md5: 1a41c9830ebf085d89834e0b39df149e
-      size: 4540
+      md5: be59face6f25e24c80d7e14bcda028a5
+      size: 4415
     params:
       configs/params.yaml:
         prepare:
