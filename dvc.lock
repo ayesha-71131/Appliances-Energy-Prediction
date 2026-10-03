@@ -29,7 +29,9 @@ stages:
           output_dir: data/processed
           target: Appliances
           horizon: 1
-          drop_columns: []
+          drop_columns:
+          - rv1
+          - rv2
           temporal_features: true
           lags:
           - 1
@@ -41,16 +43,16 @@ stages:
     outs:
     - path: data/processed
       hash: md5
-      md5: 9cf957407cf67b71485044a5691fcc52.dir
-      size: 6233963
+      md5: 5ddc27f22d1f2455c58caab2810d9d48.dir
+      size: 5514383
       nfiles: 3
   train:
     cmd: python -m src.train --params configs/params.yaml
     deps:
     - path: data/processed
       hash: md5
-      md5: 9cf957407cf67b71485044a5691fcc52.dir
-      size: 6233963
+      md5: 5ddc27f22d1f2455c58caab2810d9d48.dir
+      size: 5514383
       nfiles: 3
     - path: src/train.py
       hash: md5
@@ -75,20 +77,20 @@ stages:
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: ffa48d99ebe7c96dea79cf56d97930a0
-      size: 800100
+      md5: c80eaefd6815ea2e8d45d96283f013f4
+      size: 1026408
   evaluate:
     cmd: python -m src.evaluate --params configs/params.yaml
     deps:
     - path: data/processed
       hash: md5
-      md5: 9cf957407cf67b71485044a5691fcc52.dir
-      size: 6233963
+      md5: 5ddc27f22d1f2455c58caab2810d9d48.dir
+      size: 5514383
       nfiles: 3
     - path: models/model.joblib
       hash: md5
-      md5: ffa48d99ebe7c96dea79cf56d97930a0
-      size: 800100
+      md5: c80eaefd6815ea2e8d45d96283f013f4
+      size: 1026408
     - path: src/evaluate.py
       hash: md5
       md5: 7f3753116eac3626381fe93468cfe923
@@ -106,5 +108,5 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 6a371f593c014bbff9701f0819633409
-      size: 339
+      md5: 2d1c16dd09a0208a07249d89246bce67
+      size: 340

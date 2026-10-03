@@ -5,7 +5,7 @@ prepare:
   output_dir: data/processed
   target: Appliances        # column to predict
   horizon: 1                # predict T+1 (10 minutes ahead)
-  drop_columns: []          # experiment: [rv1, rv2]
+  drop_columns: [rv1, rv2]          # experiment: [rv1, rv2]
   temporal_features: true   # hour, weekday, month
   lags:                     # 10 min, 1 h, 24 h
   - 1
