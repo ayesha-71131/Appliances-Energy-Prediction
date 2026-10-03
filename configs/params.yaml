@@ -5,13 +5,13 @@ prepare:
   output_dir: data/processed
   target: Appliances        # column to predict
   horizon: 1                # predict T+1 (10 minutes ahead)
-  drop_columns: [rv1, rv2]          # experiment: [rv1, rv2]
+  drop_columns: []          # experiment: [rv1, rv2]
   temporal_features: true   # hour, weekday, month
   lags:                     # 10 min, 1 h, 24 h
   - 1
   - 6
   - 144
-  rolling_windows: []       # experiment: e.g. [6, 36]
+  rolling_windows: [6, 36]       # experiment: e.g. [6, 36]
   train_frac: 0.70
   val_frac: 0.15            # test = remaining 0.15
 
