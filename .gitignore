@@ -28,7 +28,7 @@ Thumbs.db
 .dvc/cache/
 
 # Raw and processed data
-data/raw/*
+data/raw/*.csv
 data/processed/*
 
 # Keep directory placeholders
@@ -52,3 +52,5 @@ models/*
 # Temporary files
 *.tmp
 *.log
+# Temporary DVC review environment
+.venv-dvc/

@@ -1,0 +1,37 @@
+# Merge this `prepare:` section into your existing configs/params.yaml
+# (Member 2 adds train/evaluate sections; keep them separate to avoid conflicts).
+prepare:
+  raw_path: data/raw/energydata_complete.csv
+  output_dir: data/processed
+  target: Appliances        # column to predict
+  horizon: 1                # predict T+1 (10 minutes ahead)
+  drop_columns: []          # experiment: [rv1, rv2]
+  temporal_features: true   # hour, weekday, month
+  lags:                     # 10 min, 1 h, 24 h
+  - 1
+  - 2
+  - 3
+  - 6
+  - 144
+  rolling_windows: []       # experiment: e.g. [6, 36]
+  train_frac: 0.70
+  val_frac: 0.15            # test = remaining 0.15
+
+seed: 42                    # used by every stage that has randomness
+
+train:
+  model: hist_gradient_boosting # random_forest | hist_gradient_boosting
+  data_dir: data/processed
+  model_path: models/model.joblib
+  random_forest:
+    n_estimators: 200
+    max_depth: 12
+    min_samples_leaf: 5
+  hist_gradient_boosting:
+    learning_rate: 0.02
+    max_iter: 600
+    max_depth: 6
+    min_samples_leaf: 50
+
+evaluate:
+  metrics_path: metrics.json

@@ -1,0 +1,112 @@
+schema: '2.0'
+stages:
+  validate:
+    cmd: python src/data_checks.py data/raw/energydata_complete.csv
+    deps:
+    - path: data/raw/energydata_complete.csv
+      hash: md5
+      md5: 69ef922b5fcafcd49097cfc09e07167e
+      size: 11979363
+    - path: src/data_checks.py
+      hash: md5
+      md5: e3827b5b39dc9b4f43847ec61badf308
+      size: 4500
+  prepare:
+    cmd: python src/prepare.py --params configs/params.yaml
+    deps:
+    - path: data/raw/energydata_complete.csv
+      hash: md5
+      md5: 69ef922b5fcafcd49097cfc09e07167e
+      size: 11979363
+    - path: src/prepare.py
+      hash: md5
+      md5: be59face6f25e24c80d7e14bcda028a5
+      size: 4415
+    params:
+      configs/params.yaml:
+        prepare:
+          raw_path: data/raw/energydata_complete.csv
+          output_dir: data/processed
+          target: Appliances
+          horizon: 1
+          drop_columns: []
+          temporal_features: true
+          lags:
+          - 1
+          - 2
+          - 3
+          - 6
+          - 144
+          rolling_windows: []
+          train_frac: 0.7
+          val_frac: 0.15
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: b5620506df2554f71b3c33d69caa0ddc.dir
+      size: 6440301
+      nfiles: 3
+  train:
+    cmd: python -m src.train --params configs/params.yaml
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: b5620506df2554f71b3c33d69caa0ddc.dir
+      size: 6440301
+      nfiles: 3
+    - path: src/train.py
+      hash: md5
+      md5: 21ed03fd99754358be2acfbbe37535d9
+      size: 2502
+    params:
+      configs/params.yaml:
+        seed: 42
+        train:
+          model: hist_gradient_boosting
+          data_dir: data/processed
+          model_path: models/model.joblib
+          random_forest:
+            n_estimators: 200
+            max_depth: 12
+            min_samples_leaf: 5
+          hist_gradient_boosting:
+            learning_rate: 0.02
+            max_iter: 600
+            max_depth: 6
+            min_samples_leaf: 50
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: e78decfb8c81eaed00f32892ffe7c68d
+      size: 781106
+  evaluate:
+    cmd: python -m src.evaluate --params configs/params.yaml
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: b5620506df2554f71b3c33d69caa0ddc.dir
+      size: 6440301
+      nfiles: 3
+    - path: models/model.joblib
+      hash: md5
+      md5: e78decfb8c81eaed00f32892ffe7c68d
+      size: 781106
+    - path: src/evaluate.py
+      hash: md5
+      md5: 7f3753116eac3626381fe93468cfe923
+      size: 1994
+    - path: src/train.py
+      hash: md5
+      md5: 21ed03fd99754358be2acfbbe37535d9
+      size: 2502
+    params:
+      configs/params.yaml:
+        evaluate:
+          metrics_path: metrics.json
+        seed: 42
+        train.model: hist_gradient_boosting
+    outs:
+    - path: metrics.json
+      hash: md5
+      md5: d6284cf83016411b031385628d5af410
+      size: 341
