@@ -9,9 +9,11 @@ prepare:
   temporal_features: true   # hour, weekday, month
   lags:                     # 10 min, 1 h, 24 h
   - 1
+  - 2
+  - 3
   - 6
   - 144
-  rolling_windows: [6, 36]       # experiment: e.g. [6, 36]
+  rolling_windows: []       # experiment: e.g. [6, 36]
   train_frac: 0.70
   val_frac: 0.15            # test = remaining 0.15
 
