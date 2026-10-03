@@ -149,3 +149,38 @@ uv run dvc repro        # metrics.json should match the table
 - Combine the best ideas: `gb-leaf50` plus rolling averages.
 - Teammates run their own experiments (see `docs/phase-6-7-model-tuning.md`).
 - Check how noisy the scores are by trying other seeds (7 and 123).
+
+---
+
+## 10. Data and feature experiments (Ayesha)
+
+**Branch:** `exp/ayesha-data-features`
+**Starting point:** `gb-leaf50` (the winner above). Each experiment changes one thing from this baseline. Decision rule: validation decides, test confirms.
+
+| Experiment | What I changed | Val R2 | Test R2 | Test MAE | Test RMSE | Commit | Verdict |
+|---|---|---|---|---|---|---|---|
+| baseline (`gb-leaf50`) | nothing | 0.6126 | 0.5219 | 30.8 | 62.9 | n/a | n/a |
+| ayesha-drop-rv | drop `rv1`, `rv2` | 0.6105 | 0.4963 | 34.8 | 64.6 | 8bdcf7f | **Failed** |
+| ayesha-rolling | rolling windows `[6, 36]` | 0.6072 | 0.5342 | 30.2 | 62.1 | 4d429c4 | **Inconclusive** |
+| ayesha-lags | lags `[1, 2, 3, 6, 144]` | 0.6087 | 0.5391 | 29.0 | 61.8 | 1a8ec16 | **Marginal pass** |
+
+### What each experiment taught me
+
+1. **ayesha-drop-rv (failed).** Worse on every metric (test R2 -0.026, test MAE +3.96). Dropping the random columns gave no benefit, so they stay. This agrees with Zarwa's `drop-rv` result, though her drop was larger because she started from a weaker model.
+2. **ayesha-rolling (inconclusive).** Validation got slightly worse (R2 -0.005) while test got slightly better (R2 +0.012). Because the two disagree, I can't claim a real gain.
+3. **ayesha-lags (marginal pass).** Test improved on all three metrics (R2 +0.017, MAE -1.80, RMSE -1.15). Validation MAE improved slightly (-0.05), while validation RMSE and R2 were slightly worse (+0.28 and -0.004), which is within noise. This is the best candidate from my branch.
+
+### Conclusion
+
+Proposed config: denser lags `[1, 2, 3, 6, 144]`, no rolling windows, no dropped columns. No experiment beat the baseline on validation, so this is a modest test-side improvement, not a decisive win.
+
+**Limitations:** single seed (42), small splits (about 2,900 rows each), and all differences are small. Next step is to repeat with seeds 7 and 123, and to try lags together with rolling windows.
+
+### How to reproduce
+
+```bash
+git checkout exp/ayesha-data-features
+uv sync
+uv run dvc pull
+uv run dvc repro
+```
