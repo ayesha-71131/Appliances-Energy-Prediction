@@ -7,7 +7,10 @@ prepare:
   horizon: 1                # predict T+1 (10 minutes ahead)
   drop_columns: []          # experiment: [rv1, rv2]
   temporal_features: true   # hour, weekday, month
-  lags: [1, 6, 144]         # 10 min, 1 h, 24 h
+  lags:                     # 10 min, 1 h, 24 h
+  - 1
+  - 6
+  - 144
   rolling_windows: []       # experiment: e.g. [6, 36]
   train_frac: 0.70
   val_frac: 0.15            # test = remaining 0.15
@@ -19,9 +22,9 @@ train:
   data_dir: data/processed
   model_path: models/model.joblib
   random_forest:
-    n_estimators: 200
-    max_depth: 12
-    min_samples_leaf: 5
+    n_estimators: 500
+    max_depth: 20
+    min_samples_leaf: 3
   hist_gradient_boosting:
     learning_rate: 0.05
     max_iter: 300

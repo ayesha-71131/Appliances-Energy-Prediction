@@ -64,9 +64,9 @@ stages:
           data_dir: data/processed
           model_path: models/model.joblib
           random_forest:
-            n_estimators: 200
-            max_depth: 12
-            min_samples_leaf: 5
+            n_estimators: 500
+            max_depth: 20
+            min_samples_leaf: 3
           hist_gradient_boosting:
             learning_rate: 0.05
             max_iter: 300
@@ -75,8 +75,8 @@ stages:
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: 005ce7ac662b7b35d2974e301e827442
-      size: 12958343
+      md5: c9c2655aad4fb3bc1a45bc0a75c33f57
+      size: 120423671
   evaluate:
     cmd: python -m src.evaluate --params configs/params.yaml
     deps:
@@ -87,8 +87,8 @@ stages:
       nfiles: 3
     - path: models/model.joblib
       hash: md5
-      md5: 005ce7ac662b7b35d2974e301e827442
-      size: 12958343
+      md5: c9c2655aad4fb3bc1a45bc0a75c33f57
+      size: 120423671
     - path: src/evaluate.py
       hash: md5
       md5: 7f3753116eac3626381fe93468cfe923
@@ -106,5 +106,5 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: 45dfaa251d92214f6126e1f5fae1b878
-      size: 332
+      md5: 011a251e2dfd68c4a914689d61370fc8
+      size: 334
