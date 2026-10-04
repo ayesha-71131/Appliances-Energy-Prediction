@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [dev, staging, main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-ruff@v1
+      - name: Ruff Check
+        run: ruff check .
+      - name: Ruff Format
+        run: ruff format --check .
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install ruff pytest pandas pyyaml scikit-learn joblib dvc
+      - name: Run Unit Tests
+        run: pytest tests/
+
+  data-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install pandas
+        run: pip install pandas
+      - name: Run Data Validation
+        run: |
+          python -c "
+          import pandas as pd
+          df = pd.read_csv('data/raw/energydata_complete.csv')
+          print('Checking for nulls...')
+          assert df.isnull().sum().sum() == 0, 'Nulls found in dataset!'
+          print('Checking columns...')
+          assert 'Appliances' in df.columns, 'Target column missing!'
+          print('Data checks passed!')
+          "
+
+  smoke-train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install pandas pyyaml scikit-learn joblib dvc
+      - name: Smoke Train
+        run: |
+          # Create a tiny sample of the data for the smoke test
+          python -c "
+          import pandas as pd
+          df = pd.read_csv('data/raw/energydata_complete.csv').head(500)
+          df.to_csv('data/raw/energydata_sample.csv', index=False)
+          "
+          # Temporarily update params to use the sample
+          sed -i 's/energydata_complete.csv/energydata_sample.csv/g' configs/params.yaml
+          # Run the training stage specifically
+          python -m src.train --params configs/params.yaml
+          echo "Smoke train completed successfully!"
