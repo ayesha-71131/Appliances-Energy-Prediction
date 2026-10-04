@@ -82,6 +82,6 @@ jobs:
           df.to_csv('data/raw/energydata_sample.csv', index=False)
           "
           sed -i 's/energydata_complete.csv/energydata_sample.csv/g' configs/params.yaml
-          <exact prepare cmd from dvc.yaml>
+          dvc repro prepare
           python -m src.train --params configs/params.yaml
           echo "Smoke train completed successfully!"
