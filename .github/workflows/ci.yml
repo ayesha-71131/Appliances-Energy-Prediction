@@ -46,7 +46,7 @@ jobs:
         run: |
           pip install pandas dvc[s3]
       - name: Pull data from DVC
-        run: dvc pull
+        run: dvc pull data/raw/energydata_complete.csv
       - name: Run Data Validation
         run: |
           python -c "
