@@ -1,5 +1,5 @@
 {
-  "git_sha": "1463d955f11e96904b17499c7062b9eb78369bc2",
+  "git_sha": "f3b83b258661685010f67a75de44c936d408fbad",
   "model": "hist_gradient_boosting",
   "seed": 42,
   "val": {
