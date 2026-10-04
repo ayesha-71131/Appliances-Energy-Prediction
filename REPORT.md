@@ -47,10 +47,14 @@ While hyperparameter tuning (e.g., `gb-leaf50`) provided initial gains, the **Ad
 
 ## 5. Quality Assurance (Screenshots)
 
-*(Please attach screenshots to the final submission)*
-- [ ] Blocked large file/secret by pre-commit
-- [ ] Failing CI check (red check)
-- [ ] Passing CI check (green check)
+<img width="1314" height="772" alt="image" src="https://github.com/user-attachments/assets/5c89543f-816a-4008-b78e-f4ec7f550eac" />
+<img width="1300" height="300" alt="image" src="https://github.com/user-attachments/assets/db6d6718-3f2d-4a9f-9614-fc2f0bb10dd5" />
+<img width="1327" height="806" alt="image" src="https://github.com/user-attachments/assets/e169f5ca-73b3-4f72-b377-6288ba16cefc" />
+<img width="1302" height="549" alt="image" src="https://github.com/user-attachments/assets/eb384a4b-de3f-4a5c-8ef5-51f56e220992" />
+
+
+
+
 
 ## 6. Retrospective
 
