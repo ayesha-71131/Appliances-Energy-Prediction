@@ -47,6 +47,9 @@ jobs:
           pip install pandas dvc[s3]
       - name: Pull data from DVC
         run: dvc pull data/raw/energydata_complete.csv
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
       - name: Run Data Validation
         run: |
           python -c "
@@ -72,6 +75,9 @@ jobs:
           pip install pandas pyyaml scikit-learn joblib dvc[s3]
       - name: Pull data from DVC
         run: dvc pull data/raw/energydata_complete.csv
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
      
 
       - name: Smoke Train
