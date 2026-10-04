@@ -3,5 +3,4 @@
 ['remote "origin-s3"']
     url = s3://dvc
     endpointurl = https://dagshub.com/mahnraslam/Appliances-Energy-Prediction.s3
-    access_key_id = 821b76a8a5dda260ed24d338da7e1acbdef769bc
-    secret_access_key = 821b76a8a5dda260ed24d338da7e1acbdef769bc
+   
