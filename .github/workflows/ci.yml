@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: [dev, staging, main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install Ruff
+        run: pip install ruff
+      - name: Ruff Check
+        run: ruff check .
+      - name: Ruff Format
+        run: ruff format --check .
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install ruff pytest pandas pyyaml scikit-learn joblib dvc
+      - name: Run Unit Tests
+        run: pytest tests/
+
+  data-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install pandas dvc[s3]
+      - name: Pull data from DVC
+        run: dvc pull data/raw/energydata_complete.csv
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
+      - name: Run Data Validation
+        run: |
+          python -c "
+          import pandas as pd
+          df = pd.read_csv('data/raw/energydata_complete.csv')
+          print('Checking for nulls...')
+          assert df.isnull().sum().sum() == 0, 'Nulls found in dataset!'
+          print('Checking columns...')
+          assert 'Appliances' in df.columns, 'Target column missing!'
+          print('Data checks passed!')
+          "
+
+  smoke-train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install pandas pyyaml scikit-learn joblib dvc[s3]
+      - name: Pull data from DVC
+        run: dvc pull data/raw/energydata_complete.csv
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DVC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DVC_SECRET_ACCESS_KEY }}
+     
+
+      - name: Smoke Train
+        run: |
+          python -c "
+          import pandas as pd
+          df = pd.read_csv('data/raw/energydata_complete.csv').head(500)
+          df.to_csv('data/raw/energydata_sample.csv', index=False)
+          "
+          sed -i 's/energydata_complete.csv/energydata_sample.csv/g' configs/params.yaml
+          dvc repro prepare
+          python -m src.train --params configs/params.yaml
+          echo "Smoke train completed successfully!"

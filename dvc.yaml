@@ -1,0 +1,45 @@
+stages:
+  validate:
+    cmd: python src/data_checks.py data/raw/energydata_complete.csv
+    deps:
+      - src/data_checks.py
+      - data/raw/energydata_complete.csv
+
+  prepare:
+    cmd: python src/prepare.py --params configs/params.yaml
+    deps:
+      - src/prepare.py
+      - data/raw/energydata_complete.csv
+    params:
+      - configs/params.yaml:
+          - prepare
+    outs:
+      - data/processed
+
+  train:
+    cmd: python -m src.train --params configs/params.yaml
+    deps:
+      - src/train.py
+      - data/processed
+    params:
+      - configs/params.yaml:
+          - seed
+          - train
+    outs:
+      - models/model.joblib
+
+  evaluate:
+    cmd: python -m src.evaluate --params configs/params.yaml
+    deps:
+      - src/evaluate.py
+      - src/train.py
+      - models/model.joblib
+      - data/processed
+    params:
+      - configs/params.yaml:
+          - seed
+          - train.model
+          - evaluate
+    metrics:
+      - metrics.json:
+          cache: false

@@ -1,0 +1,31 @@
+[project]
+name = "appliances-energy-prediction"
+version = "0.1.0"
+description = "MLOps project for predicting appliance energy use."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "dvc[s3]>=3.67.1",
+    "pandas>=2.3.3",
+    "scikit-learn>=1.7.2",
+]
+
+[dependency-groups]
+dev = [
+    "dvc>=3.67.1",
+    "ipykernel>=7.3.0",
+    "jupytext>=1.19.5",
+    "matplotlib>=3.10.9",
+    "pre-commit>=4.6.2",
+    "pytest>=8.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["."]
+addopts = "-ra"
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*.py" = ["E402"]
+"notebooks/*.ipynb" = ["E402"]
