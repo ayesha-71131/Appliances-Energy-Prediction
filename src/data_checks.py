@@ -70,9 +70,8 @@ def check_nulls(df: pd.DataFrame, report: Report) -> None:
 
 def check_dtypes(df: pd.DataFrame, report: Report) -> None:
     for col in EXPECTED_COLUMNS:
-        if col in df.columns and col != "date":
-            if not pd.api.types.is_numeric_dtype(df[col]):
-                report.errors.append(f"Column '{col}' is not numeric ({df[col].dtype})")
+        if col in df.columns and col != "date" and not pd.api.types.is_numeric_dtype(df[col]):
+            report.errors.append(f"Column '{col}' is not numeric ({df[col].dtype})")
 
 
 def check_timestamps(df: pd.DataFrame, report: Report) -> None:
