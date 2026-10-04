@@ -69,3 +69,21 @@ uv run pytest
 ```
 
 Keep datasets, model outputs, credentials, and local environment files out of Git.
+
+## Lessons learned
+
+Rules we added after things broke during this project:
+
+1. **Never commit credentials.** Keep DVC remote keys in `.dvc/config.local` or environment
+   variables. A committed token stays in Git history even after it is deleted, so rotate it at once.
+2. **Run DVC through `uv run`** (`uv run dvc repro`), never a bare `dvc`. A bare one uses the global
+   Python, whose library versions give different results.
+3. **Reset between experiments.** `dvc exp run` applies its result to the workspace, so the next run
+   starts from it. Run `git checkout -- configs/params.yaml dvc.lock metrics.json` and `uv run dvc checkout`
+   between runs, and delete `.dvc/cache/runs` after a wrong run.
+4. **Do not ignore the whole data folder.** The rule `data/raw/*` made DVC skip `data/raw/`; ignore
+   only `data/raw/*.csv`.
+5. **Keep `.gitattributes` (`* text=auto eol=lf`)** so `dvc.lock` hashes match on every machine.
+6. **`dvc push` before `git push`**, and refresh `dvc.lock` with `uv run dvc repro` after reformatting
+   source files.
+7. **Every PR gets a reviewer who runs it.** Nobody merges their own PR, and merges need an approval.
