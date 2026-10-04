@@ -23,11 +23,12 @@ from pathlib import Path
 PROJECT_ROOT = Path.cwd().parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.eda import summarize_numeric
+import matplotlib.pyplot as plt
 
 # %%
 import pandas as pd
-import matplotlib.pyplot as plt
+
+from src.eda import summarize_numeric
 
 DATA_PATH = Path("../data/raw/energydata_complete.csv")
 

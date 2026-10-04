@@ -26,6 +26,8 @@ Thumbs.db
 
 # DVC local cache
 .dvc/cache/
+.dvc/config.local
+
 
 # Raw and processed data
 data/raw/*.csv
