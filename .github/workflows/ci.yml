@@ -71,7 +71,7 @@ jobs:
         run: |
           pip install pandas pyyaml scikit-learn joblib dvc[s3]
       - name: Pull data from DVC
-        run: dvc pull
+        run: dvc pull data/raw/energydata_complete.csv
       - name: Smoke Train
         run: |
           # Create a tiny sample of the data for the smoke test
