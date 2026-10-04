@@ -184,3 +184,4 @@ uv sync
 uv run dvc pull
 uv run dvc repro
 ```
+**Merge note:** The experiment runs live in branch `exp/ayesha-data-features` (commits 8bdcf7f, 4d429c4, 1a8ec16). Only these docs were merged. `configs/params.yaml` and `dvc.lock` on `dev` stay on the `gb-leaf50` winner. Denser lags are a candidate only, pending a multi-seed check.

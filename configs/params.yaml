@@ -9,8 +9,6 @@ prepare:
   temporal_features: true   # hour, weekday, month
   lags:                     # 10 min, 1 h, 24 h
   - 1
-  - 2
-  - 3
   - 6
   - 144
   rolling_windows: []       # experiment: e.g. [6, 36]

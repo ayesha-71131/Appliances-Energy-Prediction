@@ -33,8 +33,6 @@ stages:
           temporal_features: true
           lags:
           - 1
-          - 2
-          - 3
           - 6
           - 144
           rolling_windows: []
@@ -43,16 +41,16 @@ stages:
     outs:
     - path: data/processed
       hash: md5
-      md5: b5620506df2554f71b3c33d69caa0ddc.dir
-      size: 6440301
+      md5: 9cf957407cf67b71485044a5691fcc52.dir
+      size: 6233963
       nfiles: 3
   train:
     cmd: python -m src.train --params configs/params.yaml
     deps:
     - path: data/processed
       hash: md5
-      md5: b5620506df2554f71b3c33d69caa0ddc.dir
-      size: 6440301
+      md5: 9cf957407cf67b71485044a5691fcc52.dir
+      size: 6233963
       nfiles: 3
     - path: src/train.py
       hash: md5
@@ -77,20 +75,20 @@ stages:
     outs:
     - path: models/model.joblib
       hash: md5
-      md5: e78decfb8c81eaed00f32892ffe7c68d
-      size: 781106
+      md5: ffa48d99ebe7c96dea79cf56d97930a0
+      size: 800100
   evaluate:
     cmd: python -m src.evaluate --params configs/params.yaml
     deps:
     - path: data/processed
       hash: md5
-      md5: b5620506df2554f71b3c33d69caa0ddc.dir
-      size: 6440301
+      md5: 9cf957407cf67b71485044a5691fcc52.dir
+      size: 6233963
       nfiles: 3
     - path: models/model.joblib
       hash: md5
-      md5: e78decfb8c81eaed00f32892ffe7c68d
-      size: 781106
+      md5: ffa48d99ebe7c96dea79cf56d97930a0
+      size: 800100
     - path: src/evaluate.py
       hash: md5
       md5: 7f3753116eac3626381fe93468cfe923
@@ -108,5 +106,5 @@ stages:
     outs:
     - path: metrics.json
       hash: md5
-      md5: d6284cf83016411b031385628d5af410
-      size: 341
+      md5: 6a371f593c014bbff9701f0819633409
+      size: 339
