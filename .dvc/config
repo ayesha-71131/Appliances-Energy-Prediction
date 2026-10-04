@@ -3,4 +3,6 @@
 ['remote "origin-s3"']
     url = s3://dvc
     endpointurl = https://dagshub.com/mahnraslam/Appliances-Energy-Prediction.s3
-   
+['remote "origin-s3"']
+    url = s3://dvc
+    endpointurl = https://dagshub.com/mahnraslam/Appliances-Energy-Prediction.s3
