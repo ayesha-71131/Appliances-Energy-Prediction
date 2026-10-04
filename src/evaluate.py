@@ -42,7 +42,11 @@ def evaluate(config: dict) -> dict:
     bundle = joblib.load(train_params["model_path"])
     model, features = bundle["model"], bundle["features"]
 
-    metrics: dict = {"git_sha": git_sha(), "model": train_params["model"], "seed": config["seed"]}
+    metrics: dict = {
+        "git_sha": git_sha(),
+        "model": train_params["model"],
+        "seed": config["seed"],
+    }
     for split in ("val", "test"):
         X, y = load_split(train_params["data_dir"], split)
         metrics[split] = regression_metrics(y, model.predict(X[features]))

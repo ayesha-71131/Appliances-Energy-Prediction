@@ -6,10 +6,12 @@ from src.prepare import add_lag_features, add_rolling_features, add_temporal_fea
 
 def test_add_temporal_features():
     # Create a dummy dataframe with a date column
-    df = pd.DataFrame({
-        "date": pd.to_datetime(["2023-01-01 10:00:00", "2023-01-01 10:10:00"]),
-        "Appliances": [100.0, 110.0]
-    })
+    df = pd.DataFrame(
+        {
+            "date": pd.to_datetime(["2023-01-01 10:00:00", "2023-01-01 10:10:00"]),
+            "Appliances": [100.0, 110.0],
+        }
+    )
     result = add_temporal_features(df)
 
     # Check if new columns exist
@@ -22,10 +24,9 @@ def test_add_temporal_features():
     assert result.iloc[0]["hour"] == 10
     assert result.iloc[0]["minute"] == 0
 
+
 def test_add_lag_features():
-    df = pd.DataFrame({
-        "Appliances": [10.0, 20.0, 30.0, 40.0]
-    })
+    df = pd.DataFrame({"Appliances": [10.0, 20.0, 30.0, 40.0]})
     # Lag of 1
     result = add_lag_features(df, "Appliances", [1])
 
@@ -34,10 +35,9 @@ def test_add_lag_features():
     assert np.isnan(result.iloc[0]["Appliances_lag_1"])
     assert result.iloc[1]["Appliances_lag_1"] == 10.0
 
+
 def test_add_rolling_features():
-    df = pd.DataFrame({
-        "Appliances": [10.0, 20.0, 30.0, 40.0]
-    })
+    df = pd.DataFrame({"Appliances": [10.0, 20.0, 30.0, 40.0]})
     # Window of 2
     result = add_rolling_features(df, "Appliances", [2])
 

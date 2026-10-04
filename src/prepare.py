@@ -70,7 +70,9 @@ def add_lag_features(df: pd.DataFrame, column: str, lags: list[int]) -> pd.DataF
     return out
 
 
-def add_rolling_features(df: pd.DataFrame, column: str, windows: list[int]) -> pd.DataFrame:
+def add_rolling_features(
+    df: pd.DataFrame, column: str, windows: list[int]
+) -> pd.DataFrame:
     """Trailing mean and std over rows T-w+1 .. T."""
     out = df.copy()
     for w in windows:
@@ -108,7 +110,7 @@ def add_interaction_features(df: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         out["temp_rh_interaction"] = out["T_out"] * out["RH_out"]
 
     # Target interaction with current temperature
-    target = "Appliances" # This is the default target
+    target = "Appliances"  # This is the default target
     if target in out.columns and "T_out" in out.columns:
         out["app_temp_interaction"] = out[target] * out["T_out"]
 
@@ -120,7 +122,9 @@ def chronological_split(
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """Earliest rows -> train, next -> val, latest -> test. No shuffling."""
     if train_frac <= 0 or val_frac <= 0 or train_frac + val_frac >= 1:
-        raise ValueError("Need train_frac > 0, val_frac > 0 and train_frac + val_frac < 1")
+        raise ValueError(
+            "Need train_frac > 0, val_frac > 0 and train_frac + val_frac < 1"
+        )
     n = len(df)
     n_train = int(n * train_frac)
     n_val = int(n * val_frac)
@@ -168,7 +172,9 @@ def build_dataset(df: pd.DataFrame, params: dict) -> pd.DataFrame:
 def prepare(params: dict) -> dict[str, Path]:
     df = load_raw(params["raw_path"])
     data = build_dataset(df, params)
-    train, val, test = chronological_split(data, params["train_frac"], params["val_frac"])
+    train, val, test = chronological_split(
+        data, params["train_frac"], params["val_frac"]
+    )
 
     out_dir = Path(params["output_dir"])
     out_dir.mkdir(parents=True, exist_ok=True)
